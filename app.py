@@ -12,6 +12,7 @@ MODEL_PATH = "model.pkl"
 
 def train_and_save_model():
     if not os.path.exists(MODEL_PATH):
+        # Use 3 numeric features: amount, location_code, time_of_day
         X, y = make_classification(n_samples=1000, n_features=3,
                                    n_informative=3, n_redundant=0,
                                    random_state=42)
@@ -23,6 +24,15 @@ def train_and_save_model():
 @st.cache_resource
 def load_model():
     return joblib.load(MODEL_PATH)
+
+# Map city to numeric code
+city_to_code = {
+    "Mumbai": 0,
+    "Delhi": 1,
+    "Bangalore": 2,
+    "Chennai": 3,
+    "Kolkata": 4
+}
 
 # Predict function
 def predict_fraud(model, features):
@@ -38,12 +48,13 @@ def main():
 
     # UI Inputs
     amount = st.number_input("Transaction Amount ($)", min_value=0.0, step=1.0)
-    location_code = st.selectbox("Location Code", [0, 1, 2, 3])
+    location = st.selectbox("Transaction Location", list(city_to_code.keys()))
     time_of_day = st.slider("Time of Day (0 = midnight, 23 = 11PM)", 0, 23)
 
     if st.button("Check for Fraud"):
         train_and_save_model()
         model = load_model()
+        location_code = city_to_code[location]
         is_fraud = predict_fraud(model, [amount, location_code, time_of_day])
 
         if is_fraud:
