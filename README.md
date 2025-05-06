@@ -4,7 +4,7 @@ This project is a Streamlit-based web application that detects fraudulent credit
 
 # live demo app
 
-click here:https: //nm-project-nx6xhvbdz9ldbecihjarez.streamlit.app/
+[click here](https: //nm-project-nx6xhvbdz9ldbecihjarez.streamlit.app/)
 
 ---
 
